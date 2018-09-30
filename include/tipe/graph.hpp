@@ -47,4 +47,10 @@ namespace tip
                 std::move(nodes)
         };
     }
+
+    template <class GraphT, size_t N1, size_t N2>
+    constexpr auto edge_decltype(GraphT& graph, edge<N1, N2>)
+    {
+
+    }
 }
