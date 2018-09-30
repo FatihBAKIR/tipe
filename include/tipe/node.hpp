@@ -17,6 +17,19 @@ namespace tip
     };
 
     template <size_t... Ids>
+    constexpr list<node_id_t<Ids + 1>...>
+    make_node_id_list(std::index_sequence<Ids...>) noexcept
+    {
+        return {};
+    }
+
+    template <class... NodeTs>
+    constexpr auto get_id_list(list<NodeTs...>) noexcept
+    {
+        return make_node_id_list(std::make_index_sequence<sizeof...(NodeTs)>{});
+    }
+
+    template <size_t... Ids>
     constexpr std::tuple<node_id_t<Ids + 1>...>
     make_node_ids(std::index_sequence<Ids...>) noexcept
     {
@@ -24,7 +37,7 @@ namespace tip
     }
 
     template <class... NodeTs>
-    constexpr auto get_ids(const std::tuple<NodeTs...>& nodes) noexcept
+    constexpr auto get_ids(const std::tuple<NodeTs...>&) noexcept
     {
         return make_node_ids(std::make_index_sequence<sizeof...(NodeTs)>{});
     }

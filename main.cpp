@@ -15,6 +15,18 @@ struct iota
     }
 };
 
+template <class GraphT>
+std::ostream& put(std::ostream& out, const GraphT& graph)
+{
+    out << GraphT::node_count() << " nodes\n";
+    tip::map_all(graph.get_all_node_ids(), [&](auto n){
+        tip::map_all(GraphT::successors_of(n), [&](auto to){
+            out << n.Id << " - " << to.Id << '\n';
+        });
+    });
+    return out;
+}
+
 static auto get_graph()
 {
     auto nodes = tip::make_nodes(
@@ -36,5 +48,6 @@ static auto get_graph()
 int main()
 {
     auto foo = get_graph();
+    put(std::cout, foo);
     tip::execute(foo, tip::node_id_t<1>{});
 }

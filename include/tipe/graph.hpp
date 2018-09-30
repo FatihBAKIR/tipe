@@ -26,6 +26,11 @@ namespace tip
             return sizeof...(NodeTs);
         }
 
+        constexpr auto get_all_node_ids() const
+        {
+            return get_id_list(list<NodeTs...>{});
+        }
+
         template <size_t NodeId>
         static constexpr auto successors_of(node_id_t<NodeId> node)
         {
