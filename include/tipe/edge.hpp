@@ -33,6 +33,12 @@ namespace tip
             }
         }
 
+        template <size_t NodeId>
+        static constexpr auto successors(node_id_t<NodeId> node)
+        {
+            return type_at<NodeId - 1, Edges...>{};
+        }
+
     private:
 
         template <size_t N1, size_t N2>

@@ -18,7 +18,7 @@ namespace tip::nodes
     struct split
     {
         template <class ContainerT, class NextT>
-        many_t<ContainerT> operator()(ContainerT&& x, NextT&& next) const
+        many_t<ContainerT> operator()(NextT&& next, ContainerT&& x) const
         {
             for (auto& elem : x)
             {

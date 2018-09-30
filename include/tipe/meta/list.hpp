@@ -5,6 +5,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <tuple>
 
 namespace tip
 {
@@ -37,6 +38,8 @@ namespace tip
     template <bool B, class NewT, class Rest>
     using append_if_t = typename append_if_match<B, NewT, Rest>::type;
 
+    template<int N, typename... Ts> using type_at =
+        typename std::tuple_element<N, std::tuple<Ts...>>::type;
 
     template<typename... Ts>
     struct select_last
@@ -49,4 +52,10 @@ namespace tip
 
         using type = typename decltype((tag<Ts>{}, ...))::type;
     };
+
+    template <class FunT, class... Elems>
+    void map_all(list<Elems...>, FunT&& fun)
+    {
+        (std::forward<FunT>(fun)(Elems{}), ...);
+    }
 }
