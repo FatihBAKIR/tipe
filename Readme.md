@@ -19,7 +19,7 @@ void create_graph()
     );
 
     auto ids = tip::get_ids(nodes);
-    auto& [entry, mul, print] = ids;
+    auto [entry, mul, print] = ids;
 
     auto edges = make_edges(ids)
         .connect(entry | mul | print) // short hand for .connect(entry | mul).connect(mul | print)
