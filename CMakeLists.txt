@@ -21,6 +21,6 @@ target_include_directories(tipe PUBLIC include)
 #target_compile_options(tipe PUBLIC -fno-rtti -fno-exceptions)
 
 add_executable(typeflow main.cpp)
-target_link_libraries(typeflow tipe)
+target_link_libraries(typeflow tipe pthread)
 
 add_subdirectory(tests)

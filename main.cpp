@@ -3,6 +3,8 @@
 #include <numeric>
 #include <tipe/tipe.hpp>
 #include <type_traits>
+#include <mutex>
+#include <future>
 
 struct iota
 {
@@ -13,6 +15,37 @@ struct iota
         std::iota(ret.begin(), ret.end(), 1);
         return ret;
     }
+};
+
+template <class T>
+struct aggregate
+{
+    aggregate(size_t sz) : m_needed{sz} {}
+    aggregate(aggregate&& a) : m_elems{std::move(a.m_elems)}, m_needed{a.m_needed}, m_prot{} {}
+
+    template <class NextT>
+    void operator()(NextT&& next, T&& t) const
+    {
+        std::lock_guard lk{m_prot};
+
+        m_elems.push_back(std::forward<T>(t));
+
+        if (m_elems.size() < m_needed)
+        {
+            return;
+        }
+
+        next(std::move(m_elems));
+        m_elems.clear();
+    }
+
+private:
+    /**
+     * due to const requirement, we have these mutables
+     */
+    mutable std::vector<T> m_elems;
+    mutable std::mutex m_prot;
+    size_t m_needed;
 };
 
 template <class GraphT>
@@ -32,15 +65,16 @@ static auto get_graph()
     auto nodes = tip::make_nodes(
         tip::nodes::constant<1>{},
         [](int x) { return x * 2; },
+        aggregate<int> {2},
+        tip::nodes::split{},
         tip::nodes::print{ std::cout, "\n" }
     );
 
     auto ids = tip::get_ids(nodes);
-    auto& [entry, mul, print] = ids;
+    auto& [entry, mul, aggr, split, print] = ids;
 
     auto edges = make_edges(ids)
-        .connect(entry | mul | print)
-        .connect(entry | print);
+        .connect(entry | mul | aggr | split | print);
 
     return make_graph(std::move(nodes), edges);
 }
@@ -48,6 +82,11 @@ static auto get_graph()
 int main()
 {
     auto foo = get_graph();
-    put(std::cout, foo);
-    tip::execute(foo, tip::node_id_t<1>{});
+    put(std::cout, foo) << '\n';
+    std::async([&]{
+        tip::execute(foo, tip::node_id_t<1>{});
+    });
+    std::async([&]{
+        tip::execute(foo, tip::node_id_t<1>{});
+    });
 }
