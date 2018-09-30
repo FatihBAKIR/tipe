@@ -21,7 +21,7 @@ namespace tip
         using NodesT = list<NodeTs...>;
         using EdgesList = Edges;
 
-        static constexpr size_t node_count()
+        constexpr size_t node_count() const
         {
             return sizeof...(NodeTs);
         }
@@ -32,10 +32,13 @@ namespace tip
         }
 
         template <size_t NodeId>
-        static constexpr auto successors_of(node_id_t<NodeId> node)
+        constexpr auto successors_of(node_id_t<NodeId> node) const
         {
             return Edges::successors(node);
         }
+
+        template <size_t NodeId>
+        using successor_ts = typename Edges:: template successor_ts<NodeId>;
 
         Storage m_nodes;
     };

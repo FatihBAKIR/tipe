@@ -34,10 +34,10 @@ namespace tip
          * value passed by the current node. It's either called directly by
          * the node, or we wrap the node and call it with the return value.
          */
-        auto next_fun = [&](auto&&... val)
+        auto next_fun = [&graph, n] (auto&&... val)
         {
-            constexpr auto successors = GraphT::successors_of(n);
-            map_all(successors, [&](auto el){
+            using successors = typename GraphT :: template successor_ts<n.Id>;
+            map_all(successors{}, [&](auto el){
                 using next_t = decltype(el);
                 execute(graph, next_t{}, std::forward<decltype(val)>(val)...);
             });

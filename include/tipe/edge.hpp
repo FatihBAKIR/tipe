@@ -66,6 +66,9 @@ namespace tip
             return type_at<NodeId - 1, Edges...>{};
         }
 
+        template <size_t NodeId>
+        using successor_ts = type_at<NodeId - 1, Edges...>;
+
     private:
 
         template <size_t N1, size_t N2>

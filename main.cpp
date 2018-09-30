@@ -18,9 +18,9 @@ struct iota
 template <class GraphT>
 std::ostream& put(std::ostream& out, const GraphT& graph)
 {
-    out << GraphT::node_count() << " nodes\n";
+    out << graph.node_count() << " nodes\n";
     tip::map_all(graph.get_all_node_ids(), [&](auto n){
-        tip::map_all(GraphT::successors_of(n), [&](auto to){
+        tip::map_all(graph.successors_of(n), [&](auto to){
             out << n.Id << " - " << to.Id << '\n';
         });
     });

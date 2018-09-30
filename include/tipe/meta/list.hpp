@@ -38,7 +38,7 @@ namespace tip
     template <bool B, class NewT, class Rest>
     using append_if_t = typename append_if_match<B, NewT, Rest>::type;
 
-    template<int N, typename... Ts> using type_at =
+    template<size_t N, typename... Ts> using type_at =
         typename std::tuple_element<N, std::tuple<Ts...>>::type;
 
     template<typename... Ts>
