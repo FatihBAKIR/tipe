@@ -6,7 +6,8 @@
 
 #include <tipe/meta/list.hpp>
 #include <tuple>
-#include "node.hpp"
+#include <tipe/node.hpp>
+#include <tipe/edge.hpp>
 
 namespace tip
 {
@@ -38,4 +39,12 @@ namespace tip
     struct graph_def
     {
     };
+
+    template <class... NodeTs, class... Edges>
+    constexpr auto make_graph(std::tuple<NodeTs...>&& nodes, tip::edges<Edges...>)
+    {
+        return tip::graph<std::tuple<NodeTs...>, tip::edges<Edges...>, NodeTs...> {
+                std::move(nodes)
+        };
+    }
 }
