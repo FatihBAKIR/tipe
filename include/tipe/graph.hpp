@@ -35,11 +35,6 @@ namespace tip
         Storage m_nodes;
     };
 
-    template <class Edges, size_t Len>
-    struct graph_def
-    {
-    };
-
     template <class... NodeTs, class... Edges>
     constexpr auto make_graph(std::tuple<NodeTs...>&& nodes, tip::edges<Edges...>)
     {
@@ -49,8 +44,5 @@ namespace tip
     }
 
     template <class GraphT, size_t N1, size_t N2>
-    constexpr auto edge_decltype(GraphT& graph, edge<N1, N2>)
-    {
-
-    }
+    constexpr auto edge_decltype(GraphT& graph, edge<N1, N2>);
 }
