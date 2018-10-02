@@ -10,11 +10,13 @@
 
 namespace tip::nodes
 {
-
+    /**
+     * This node converts a msgpack buffer into an nlohmann::json object.
+     */
     struct msgpack_to_json
     {
         nlohmann::json
-        operator()(tos::span<const char> msgpack)
+        operator()(tos::span<const char> msgpack) const
         {
             cw_unpack_context uc;
             cw_unpack_context_init (&uc, (void*)msgpack.data(), msgpack.size(), nullptr);
@@ -22,7 +24,7 @@ namespace tip::nodes
             return parse_one(uc);
         }
 
-        nlohmann::json parse_one(cw_unpack_context& uc)
+        nlohmann::json parse_one(cw_unpack_context& uc) const
         {
             cw_unpack_next(&uc);
             switch (uc.item.type)
