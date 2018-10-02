@@ -1,5 +1,7 @@
 # Tipe
 
+[![CircleCI](https://circleci.com/gh/FatihBAKIR/tipe.svg?style=svg)](https://circleci.com/gh/FatihBAKIR/tipe)
+
 _Tipe_ (pronounced type) is a strongly typed data flow graph processing library.
 It's advantage lies at its compile time nature. The graphs are defined at compile
 time, and are heavily optimized with C++ compilers and type checking is also
