@@ -18,6 +18,9 @@ namespace tip::nodes
         nlohmann::json
         operator()(tos::span<const char> msgpack) const
         {
+            // apparently, there's a msgpack parser in nlohmann already :(
+            //return nlohmann::json::from_msgpack(msgpack.data(), msgpack.size());
+
             cw_unpack_context uc;
             cw_unpack_context_init (&uc, (void*)msgpack.data(), msgpack.size(), nullptr);
 
@@ -71,7 +74,8 @@ namespace tip::nodes
                         {
                             return nullptr;
                         }
-                        arr[(std::string)key] = val;
+                        std::string k = key;
+                        arr[k] = val;
                     }
                     return arr;
                 }
