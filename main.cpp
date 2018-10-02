@@ -26,7 +26,7 @@ struct aggregate
     template <class NextT>
     void operator()(NextT&& next, T&& t) const
     {
-        std::lock_guard lk{m_prot};
+        std::lock_guard<std::mutex> lk{m_prot};
 
         m_elems.push_back(std::forward<T>(t));
 
