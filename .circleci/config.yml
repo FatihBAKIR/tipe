@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  x86_build:
+    docker:
+      - image: ubuntu:bionic
+    steps:
+      - checkout
+      - run:
+          name: Update apt
+          command: apt-get update
+      - run:
+          name: Install Toolchain
+          command: apt-get install -y g++-7 cmake ninja-build git
+      - run:
+          environment:
+            CXX: g++-7
+          name: Generate Project
+          command: mkdir build && cd build && cmake -G Ninja ..
+      - run:
+          working_directory: build/
+          name: Build Project
+          command: ninja
+      - run:
+          working_directory: build/tests
+          name: Run Tests (basic)
+          command: ./basic_tests
+      - run:
+          working_directory: build/tests
+          name: Run Tests (msgpack_json)
+          command: ./msgpack_json_tests
+workflows:
+  version: 2
+  all_platforms:
+    jobs:
+      - x86_build

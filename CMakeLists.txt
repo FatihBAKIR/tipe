@@ -16,11 +16,12 @@ add_library(tipe
     include/tipe/node_traits.hpp
     include/tipe/execution.hpp
     include/tipe/nodes/print.hpp
-)
+        include/tipe/nodes/msgpack_to_json.hpp)
 target_include_directories(tipe PUBLIC include)
-#target_compile_options(tipe PUBLIC -fno-rtti -fno-exceptions)
 
 add_executable(typeflow main.cpp)
-target_link_libraries(typeflow tipe pthread)
+target_link_libraries(typeflow tipe pthread cwpack)
+
+add_subdirectory(CWPack)
 
 add_subdirectory(tests)
