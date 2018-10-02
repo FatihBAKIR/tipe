@@ -32,6 +32,12 @@ namespace tip
         }
 
         template <size_t NodeId>
+        auto& get_node(node_id_t<NodeId> node)
+        {
+            return std::get<NodeId - 1>(m_nodes);
+        }
+
+        template <size_t NodeId>
         constexpr auto successors_of(node_id_t<NodeId> node) const
         {
             return Edges::successors(node);

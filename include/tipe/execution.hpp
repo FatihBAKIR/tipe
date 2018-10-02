@@ -26,6 +26,19 @@ namespace tip
         };
     }
 
+    template <class GraphT, size_t NodeId>
+    constexpr auto next_of(GraphT& graph, tip::node_id_t<NodeId> n)
+    {
+        return [&graph, n] (auto&&... val)
+        {
+            using successors = typename GraphT :: template successor_ts<n.Id>;
+            map_all(successors{}, [&](auto el){
+                using next_t = decltype(el);
+                execute(graph, next_t{}, std::forward<decltype(val)>(val)...);
+            });
+        };
+    }
+
     template <size_t RootId, class GraphT, class... ArgTs>
     constexpr auto execute(GraphT& graph, tip::node_id_t<RootId> n, ArgTs&&... args)
     {
@@ -34,14 +47,7 @@ namespace tip
          * value passed by the current node. It's either called directly by
          * the node, or we wrap the node and call it with the return value.
          */
-        auto next_fun = [&graph, n] (auto&&... val)
-        {
-            using successors = typename GraphT :: template successor_ts<n.Id>;
-            map_all(successors{}, [&](auto el){
-                using next_t = decltype(el);
-                execute(graph, next_t{}, std::forward<decltype(val)>(val)...);
-            });
-        };
+        auto next_fun = next_of(graph, n);
 
         // Node identifiers are 1 indexed
         const auto& node = std::get<RootId - 1>(graph.m_nodes);

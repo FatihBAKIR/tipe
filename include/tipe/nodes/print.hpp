@@ -2,9 +2,10 @@
 // Created by Mehmet Fatih BAKIR on 29/09/2018.
 //
 
-#include <ostream>
-
 #pragma once
+
+#include <ostream>
+#include <tos/span.hpp>
 
 namespace tip::nodes
 {
@@ -18,7 +19,16 @@ namespace tip::nodes
         template <class T>
         void operator()(T&& t) const
         {
-            *m_osp << t << m_sep;
+            *m_osp << std::forward<T>(t) << m_sep;
+        }
+
+        void operator()(tos::span<const char> s) const
+        {
+            for (auto c : s)
+            {
+                *m_osp << c;
+            }
+            *m_osp << m_sep;
         }
 
     private:

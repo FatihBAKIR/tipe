@@ -3,6 +3,8 @@ project(typeflow)
 
 set(CMAKE_CXX_STANDARD 17)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 add_library(tipe
     src/stub.cpp
     include/tipe/tipe.hpp
@@ -16,12 +18,21 @@ add_library(tipe
     include/tipe/node_traits.hpp
     include/tipe/execution.hpp
     include/tipe/nodes/print.hpp
-        include/tipe/nodes/msgpack_to_json.hpp)
+    include/tipe/nodes/msgpack_to_json.hpp
+    include/tipe/nodes/tcp.hpp)
 target_include_directories(tipe PUBLIC include)
 
 add_executable(typeflow src/main.cpp)
 target_link_libraries(typeflow tipe pthread cwpack)
 
 add_subdirectory(CWPack)
+
+find_package(LibUV REQUIRED)
+if (${LibUV_FOUND})
+    message(STATUS "Found LibUV ${LibUV_VERSION}, building UVW")
+    add_subdirectory(uvw-1.11.1_libuv-v1.23)
+    target_link_libraries(tipe PUBLIC ${LibUV_LIBRARY} uvw)
+    target_include_directories(tipe PUBLIC ${LibUV_INCLUDE_DIR})
+endif()
 
 add_subdirectory(tests)
