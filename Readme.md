@@ -1,5 +1,7 @@
 # Tipe
 
+[![CircleCI](https://circleci.com/gh/FatihBAKIR/tipe.svg?style=svg)](https://circleci.com/gh/FatihBAKIR/tipe)
+
 _Tipe_ (pronounced type) is a strongly typed data flow graph processing library.
 It's advantage lies at its compile time nature. The graphs are defined at compile
 time, and are heavily optimized with C++ compilers and type checking is also
@@ -24,6 +26,14 @@ void create_graph()
     auto edges = make_edges(ids)
         .connect(entry | mul | print) // short hand for .connect(entry | mul).connect(mul | print)
         .connect(entry | print);
+
+    /*
+        The graph looks like this:
+
+        (entry) ------------- (print)
+            \                   /
+              ----- (mul) -----
+    */
 
     return make_graph(std::move(nodes), edges);
 }
