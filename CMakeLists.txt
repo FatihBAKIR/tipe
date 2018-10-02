@@ -19,7 +19,7 @@ add_library(tipe
         include/tipe/nodes/msgpack_to_json.hpp)
 target_include_directories(tipe PUBLIC include)
 
-add_executable(typeflow main.cpp)
+add_executable(typeflow src/main.cpp)
 target_link_libraries(typeflow tipe pthread cwpack)
 
 add_subdirectory(CWPack)
