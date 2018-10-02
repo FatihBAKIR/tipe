@@ -27,6 +27,14 @@ void create_graph()
         .connect(entry | mul | print) // short hand for .connect(entry | mul).connect(mul | print)
         .connect(entry | print);
 
+    /*
+        The graph looks like this:
+
+        (entry) ------------- (print)
+            \                   /
+              ----- (mul) -----
+    */
+
     return make_graph(std::move(nodes), edges);
 }
 ```
