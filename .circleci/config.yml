@@ -10,7 +10,7 @@ jobs:
           command: apt-get update
       - run:
           name: Install Toolchain
-          command: apt-get install -y g++-7 cmake ninja-build git
+          command: apt-get install -y g++-7 cmake ninja-build git wget
       - run:
           name: Download libuv sources
           command: wget https://github.com/libuv/libuv/archive/v1.23.1.tar.gz
