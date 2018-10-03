@@ -9,7 +9,7 @@ int main()
     using namespace std::chrono_literals;
     auto nodes = tip::make_nodes(
         tip::nodes::timer(loop, 1000ms),
-        []() -> std::string {
+        []{
             return "hello";
         },
         tip::nodes::print { std::cout, "\n" }

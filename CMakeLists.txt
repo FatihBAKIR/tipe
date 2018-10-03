@@ -33,13 +33,21 @@ target_link_libraries(tipe PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 add_subdirectory(external/CWPack)
 target_link_libraries(tipe PUBLIC cwpack)
 
-find_package(LibUV REQUIRED)
-if (${LibUV_FOUND})
-    message(STATUS "Found LibUV ${LibUV_VERSION}, building UVW")
-    add_subdirectory(external/uvw-1.11.1_libuv-v1.23)
-    target_link_libraries(tipe PUBLIC ${LibUV_LIBRARY} uvw)
-    target_include_directories(tipe PUBLIC ${LibUV_INCLUDE_DIR})
-endif()
+include(ExternalProject)
+ExternalProject_Add(libuv
+    GIT_REPOSITORY https://github.com/libuv/libuv.git
+    GIT_TAG        v1.23.1
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libuv
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+)
+
+ExternalProject_Get_Property(libuv install_dir)
+
+add_library(LibUV::LibUV STATIC IMPORTED)
+set_property(TARGET LibUV::LibUV PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libuv_a.a)
+set_property(TARGET LibUV::LibUV PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${install_dir}/include)
+add_subdirectory(external/uvw-1.11.1_libuv-v1.23)
+target_link_libraries(tipe PUBLIC LibUV::LibUV uvw)
 
 add_subdirectory(tests)
 add_subdirectory(samples)
