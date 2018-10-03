@@ -19,7 +19,7 @@ jobs:
       - run:
           working_directory: build/
           name: Build Project
-          command: make libuv && make
+          command: make
       - run:
           working_directory: build/tests
           name: Run Tests (basic)

@@ -33,21 +33,19 @@ target_link_libraries(tipe PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 add_subdirectory(external/CWPack)
 target_link_libraries(tipe PUBLIC cwpack)
 
-include(ExternalProject)
-ExternalProject_Add(libuv
-    GIT_REPOSITORY https://github.com/libuv/libuv.git
-    GIT_TAG        v1.23.1
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libuv
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-)
 
-ExternalProject_Get_Property(libuv install_dir)
+set(PROJECT_CMAKE_IN ${CMAKE_SOURCE_DIR}/cmake/in)
+set(PROJECT_DEPS_DIR ${CMAKE_SOURCE_DIR}/deps)
+set(LIBUV_DEPS_DIR ${PROJECT_DEPS_DIR}/libuv)
 
-add_library(LibUV::LibUV STATIC IMPORTED)
-set_property(TARGET LibUV::LibUV PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libuv_a.a)
-set_property(TARGET LibUV::LibUV PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${install_dir}/include)
+configure_file(${PROJECT_CMAKE_IN}/deps.in ${PROJECT_DEPS_DIR}/CMakeLists.txt)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY ${PROJECT_DEPS_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${PROJECT_DEPS_DIR})
+add_subdirectory(${LIBUV_DEPS_DIR})
+
 add_subdirectory(external/uvw-1.11.1_libuv-v1.23)
-target_link_libraries(tipe PUBLIC LibUV::LibUV uvw)
+target_link_libraries(tipe PUBLIC uv_a uvw)
+target_include_directories(tipe PUBLIC ${LIBUV_DEPS_DIR}/include)
 
 add_subdirectory(tests)
 add_subdirectory(samples)
