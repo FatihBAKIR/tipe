@@ -106,3 +106,8 @@ functions passed as nodes must be callable on const objects. Execution model of 
 graphs may involve multiple threads in the future and immutable functions are a good
 precaution for now. The constness requirement is mostly about thread safety. Through
 proper synchronisation and use of `mutable` members, stateful nodes can be implemented.
+
+## Parallelism
+
+As all the nodes are expected to be thread safe, `tipe` supports parallel execution of
+the graph out of the box, no need to explicitly protect anything.
