@@ -49,6 +49,11 @@ namespace tip
             return Edges::successors(node);
         }
 
+        constexpr auto roots() const
+        {
+            return Edges::get_roots();
+        }
+
         template <size_t NodeId>
         using successor_ts = typename Edges:: template successor_ts<NodeId>;
 

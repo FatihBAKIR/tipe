@@ -103,10 +103,12 @@ int main()
 
     auto g = tip::make_graph(std::move(nodes), edges);
 
-    auto r = g.terminals();
-    
-    auto& ts = g.get_node(tcp);
-    ts.tip_start(g, next_of(g, tcp));
+    auto r = g.roots();
+
+    tip::map_all(r, [&g](auto root_id){
+        auto& ts = g.get_node(root_id);
+        ts.tip_start(g, next_of(g, root_id));
+    });
 
     loop->run();
 }

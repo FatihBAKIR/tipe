@@ -65,23 +65,25 @@ namespace tip
     struct filter<Predicate, list<>> { using type = list<>; };
 
     template <typename, typename>
-    struct Cons;
+    struct prepend;
 
     template <typename  T, typename ...Args>
-    struct Cons<T, list<Args...>>
+    struct prepend<T, list<Args...>>
     {
         using type = list<T, Args...>;
     };
 
     template <class T, class List>
-    using prepend_t = typename Cons<T, List>::type;
+    using prepend_t = typename prepend<T, List>::type;
 
     template <class Predicate, typename Head, typename ...Tail>
     struct filter<Predicate, list<Head, Tail...>>
     {
         using TailList = typename filter<Predicate, list<Tail...>>::type;
-
         using type = std::conditional_t<Predicate:: template value<Head>,
                 prepend_t<Head, TailList>, TailList>;
     };
+
+    template <class Predicate, class List>
+    using filter_t = typename filter<Predicate, List>::type;
 }

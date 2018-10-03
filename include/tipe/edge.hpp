@@ -33,8 +33,10 @@ namespace tip
         using empty_list = tip::list<>;
     }
 
-    template <class... Edges>
-    struct edges
+    template <class...> struct edges;
+
+    template <class... Edges, class... Roots>
+    struct edges <list<Edges...>, list<Roots...>>
     {
         /**
          * Create connections from the given list of edges.
@@ -84,7 +86,10 @@ namespace tip
             return terminals<NodeIds...>{};
         }
 
-        
+        static constexpr auto get_roots()
+        {
+            return list<Roots...>{};
+        }
 
     private:
 
@@ -94,16 +99,27 @@ namespace tip
             return do_connect(e, std::make_index_sequence<sizeof...(Edges)>{});
         };
 
+        template <class DiscardT>
+        struct discard_filter
+        {
+            template <class T>
+            static constexpr bool value = !std::is_same<DiscardT, T>{};
+        };
+
         template <size_t N1, size_t N2, size_t... Ids>
         static constexpr auto do_connect(edge<N1, N2>, std::index_sequence<Ids...>)
         {
-            return edges<append_if_t<Ids == N1 - 1, node_id_t<N2>, Edges>...>{};
+            return edges<
+                list<append_if_t<Ids == N1 - 1, node_id_t<N2>, Edges>...>,
+                filter_t<discard_filter<node_id_t<N2>>, list<Roots...>>
+            >{};
         };
     };
 
     template<size_t... NodeIds>
     constexpr auto make_edges(const std::tuple<node_id_t<NodeIds>...>&) {
-        return edges<detail::empty_list<NodeIds>...>{};
+        return edges<list<detail::empty_list<NodeIds>...>,
+                    list<node_id_t<NodeIds>...>>{};
     }
 
     template <size_t N1, size_t N2>
