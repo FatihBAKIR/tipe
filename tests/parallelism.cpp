@@ -5,6 +5,7 @@
 #include <tipe/tipe.hpp>
 #include "catch.hpp"
 #include <thread>
+#include <atomic>
 
 TEST_CASE("simple parallelism", "[tipe]")
 {
