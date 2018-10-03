@@ -34,7 +34,13 @@ namespace tip
         template <size_t NodeId>
         auto& get_node(node_id_t<NodeId> node)
         {
-            return std::get<NodeId - 1>(m_nodes);
+            using std::get;
+            return get<NodeId - 1>(m_nodes);
+        }
+
+        constexpr auto terminals() const
+        {
+            return Edges::get_terminals(get_all_node_ids());
         }
 
         template <size_t NodeId>

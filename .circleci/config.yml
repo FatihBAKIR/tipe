@@ -12,6 +12,9 @@ jobs:
           name: Install Toolchain
           command: apt-get install -y g++-7 cmake ninja-build git
       - run:
+          name: Install libuv
+          command: apt-get install -y libuv1-dev
+      - run:
           environment:
             CXX: g++-7
           name: Generate Project

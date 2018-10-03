@@ -9,7 +9,7 @@ namespace tip::nodes
     template <auto Value>
     struct constant
     {
-        auto operator()() const
+        auto operator()() const noexcept
         {
             return Value;
         }

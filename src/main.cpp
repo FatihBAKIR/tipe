@@ -81,6 +81,8 @@ static auto get_graph()
     return make_graph(std::move(nodes), edges);
 }
 
+template <class...> class printer_t;
+
 int main()
 {
     auto loop = uvw::Loop::getDefault();
@@ -101,6 +103,8 @@ int main()
 
     auto g = tip::make_graph(std::move(nodes), edges);
 
+    auto r = g.terminals();
+    
     auto& ts = g.get_node(tcp);
     ts.tip_start(g, next_of(g, tcp));
 

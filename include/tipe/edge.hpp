@@ -69,6 +69,23 @@ namespace tip
         template <size_t NodeId>
         using successor_ts = type_at<NodeId - 1, Edges...>;
 
+        struct is_terminal
+        {
+            template <class NodeId>
+            static constexpr bool value = std::is_same<type_at<NodeId::Id - 1, Edges...>, list<>>{};
+        };
+
+        template <class... NodeIds>
+        using terminals = typename filter<is_terminal, list<NodeIds...>>::type;
+
+        template <class... NodeIds>
+        static constexpr auto get_terminals(list<NodeIds...>)
+        {
+            return terminals<NodeIds...>{};
+        }
+
+        
+
     private:
 
         template <size_t N1, size_t N2>
