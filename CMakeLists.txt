@@ -25,7 +25,10 @@ add_library(tipe
     include/tipe/nodes/tcp.hpp
     include/tipe/nodes/timer.hpp
     include/tipe/nodes/aggregate.hpp)
+
+find_package(Threads REQUIRED)
 target_include_directories(tipe PUBLIC include)
+target_link_libraries(tipe PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 
 add_subdirectory(external/CWPack)
 target_link_libraries(tipe PUBLIC cwpack)
