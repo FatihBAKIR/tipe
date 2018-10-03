@@ -18,6 +18,8 @@ jobs:
           name: Extract libuv
           command: tar xf v1.23.1.tar.gz
       - run:
+          environment:
+            CXX: g++-7
           name: Build libuv
           command: cd libuv-1.23.1/ && mkdir build && cd build && cmake -G Ninja .. && ninja && ninja install
       - run:
