@@ -83,4 +83,13 @@ namespace tip
         });
         return out;
     }
+
+    template <class GraphT>
+    void start_roots(GraphT& g)
+    {
+        tip::map_all(g.roots(), [&g](auto root_id){
+            auto& ts = g.get_node(root_id);
+            ts.tip_start(g, next_of(g, root_id));
+        });
+    }
 }
