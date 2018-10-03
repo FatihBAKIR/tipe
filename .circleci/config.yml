@@ -26,11 +26,11 @@ jobs:
           environment:
             CXX: g++-7
           name: Generate Project
-          command: mkdir build && cd build && cmake -G Ninja ..
+          command: mkdir build && cd build && cmake ..
       - run:
           working_directory: build/
           name: Build Project
-          command: ninja
+          command: make
       - run:
           working_directory: build/tests
           name: Run Tests (basic)
