@@ -12,8 +12,14 @@ jobs:
           name: Install Toolchain
           command: apt-get install -y g++-7 cmake ninja-build git
       - run:
-          name: Install libuv
-          command: apt-get install -y libuv1-dev
+          name: Download libuv sources
+          command: wget https://github.com/libuv/libuv/archive/v1.23.1.tar.gz
+      - run:
+          name: Extract libuv
+          command: tar xf v1.23.1.tar.gz
+      - run:
+          name: Build libuv
+          command: cd libuv-1.23.1/ && mkdir build && cd build && cmake -G Ninja .. && ninja && ninja install
       - run:
           environment:
             CXX: g++-7
