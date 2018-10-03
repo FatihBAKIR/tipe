@@ -23,7 +23,8 @@ add_library(tipe
     include/tipe/nodes/print.hpp
     include/tipe/nodes/msgpack_to_json.hpp
     include/tipe/nodes/tcp.hpp
-    include/tipe/nodes/timer.hpp)
+    include/tipe/nodes/timer.hpp
+    include/tipe/nodes/aggregate.hpp)
 target_include_directories(tipe PUBLIC include)
 
 add_subdirectory(external/CWPack)

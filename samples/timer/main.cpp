@@ -1,7 +1,5 @@
 #include <iostream>
 #include <tipe/tipe.hpp>
-#include <uvw.hpp>
-#include <tipe/nodes/tcp.hpp>
 #include <tipe/nodes/timer.hpp>
 
 int main()

@@ -8,6 +8,7 @@
 #include <tuple>
 #include <tipe/node.hpp>
 #include <tipe/edge.hpp>
+#include <ostream>
 
 namespace tip
 {
@@ -70,4 +71,16 @@ namespace tip
 
     template <class GraphT, size_t N1, size_t N2>
     constexpr auto edge_decltype(GraphT& graph, edge<N1, N2>);
+
+    template <class GraphT>
+    std::ostream& put(std::ostream& out, const GraphT& graph)
+    {
+        out << graph.node_count() << " nodes\n";
+        tip::map_all(graph.get_all_node_ids(), [&](auto n){
+            tip::map_all(graph.successors_of(n), [&](auto to){
+                out << n.Id << " - " << to.Id << '\n';
+            });
+        });
+        return out;
+    }
 }
