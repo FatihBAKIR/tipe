@@ -9,4 +9,7 @@ add_executable(basic_tests basic_tests.cpp)
 target_link_libraries(basic_tests catch_main tipe)
 
 add_executable(msgpack_json_tests msgpack_json_tests.cpp)
-target_link_libraries(msgpack_json_tests catch_main tipe cwpack)
+target_link_libraries(msgpack_json_tests catch_main tipe)
+
+add_executable(parallelism_tests parallelism.cpp)
+target_link_libraries(parallelism_tests catch_main tipe)
