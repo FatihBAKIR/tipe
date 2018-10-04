@@ -89,7 +89,7 @@ namespace tip
     {
         tip::map_all(g.roots(), [&g](auto root_id){
             auto& ts = g.get_node(root_id);
-            ts.tip_start(g, next_of(g, root_id));
+            ts.tip_start(g, start_of(g, root_id));
         });
     }
 }

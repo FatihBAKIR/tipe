@@ -6,6 +6,7 @@
 
 #include <uvw.hpp>
 #include <chrono>
+#include <tipe/flow_ctx.hpp>
 
 namespace tip::nodes
 {
@@ -19,10 +20,11 @@ namespace tip::nodes
         }
 
         template <class GraphT, class NextT>
-        void tip_start(GraphT& g, NextT&& next)
+        void tip_start(GraphT& g, NextT&& start)
         {
-            m_tmr->on<uvw::TimerEvent>([next](const uvw::TimerEvent& e, uvw::TimerHandle&) {
-                next();
+            static int x = 0;
+            m_tmr->on<uvw::TimerEvent>([start](const uvw::TimerEvent& e, uvw::TimerHandle&) {
+                start(empty_ctx{});
             });
             m_tmr->start(m_interval, m_interval);
         }

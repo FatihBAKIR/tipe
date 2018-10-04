@@ -24,7 +24,7 @@ add_library(tipe
     include/tipe/nodes/msgpack_to_json.hpp
     include/tipe/nodes/tcp.hpp
     include/tipe/nodes/timer.hpp
-    include/tipe/nodes/aggregate.hpp)
+    include/tipe/nodes/aggregate.hpp include/tipe/flow_ctx.hpp)
 
 find_package(Threads REQUIRED)
 target_include_directories(tipe PUBLIC include)
@@ -49,3 +49,6 @@ target_include_directories(tipe PUBLIC ${LIBUV_DEPS_DIR}/include)
 
 add_subdirectory(tests)
 add_subdirectory(samples)
+
+add_subdirectory(external/postgres)
+target_link_libraries(tipe PUBLIC taocpp::postgres)
