@@ -188,7 +188,6 @@ namespace tos
         }
 
         arr_packer::arr_packer(packer &p, size_t len) : m_len{len}, m_done{0}, m_packer{p} {
-
         }
 
         map_packer arr_packer::insert_map(size_t len) {
