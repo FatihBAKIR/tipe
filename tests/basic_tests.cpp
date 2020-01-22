@@ -4,6 +4,7 @@
 
 #include <tipe/tipe.hpp>
 #include "catch.hpp"
+#include <uvw.hpp>
 
 TEST_CASE("very basic", "[tipe]")
 {
@@ -24,7 +25,7 @@ TEST_CASE("very basic", "[tipe]")
 
     auto g = tip::make_graph(std::move(nodes), edges);
 
-    tip::execute(g, base);
+    tip::execute(g, base, tip::empty_ctx{});
 
     REQUIRE(res == 4);
 }
@@ -75,8 +76,8 @@ TEST_CASE("init param", "[tipe]")
 
     auto g = tip::make_graph(std::move(nodes), edges);
 
-    tip::execute(g, base, 1);
-    tip::execute(g, base, 4);
+    tip::execute(g, base, tip::empty_ctx{}, 1);
+    tip::execute(g, base, tip::empty_ctx{}, 4);
 
     REQUIRE(std::count(vals.begin(), vals.end(), 4) == 1);
     REQUIRE(std::count(vals.begin(), vals.end(), 2) == 1);

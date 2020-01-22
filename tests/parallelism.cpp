@@ -6,6 +6,7 @@
 #include "catch.hpp"
 #include <thread>
 #include <atomic>
+#include <uvw.hpp>
 
 TEST_CASE("simple parallelism", "[tipe]")
 {

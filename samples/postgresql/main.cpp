@@ -2,6 +2,7 @@
 #include <tipe/tipe.hpp>
 #include <tipe/nodes/timer.hpp>
 #include <tao/postgres.hpp>
+#include <uvw.hpp>
 
 int main()
 {

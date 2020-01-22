@@ -4,11 +4,11 @@
 
 int main()
 {
-    auto loop = uvw::Loop::getDefault();
+    boost::asio::io_service io;
 
     using namespace std::chrono_literals;
     auto nodes = tip::make_nodes(
-        tip::nodes::timer(loop, 1000ms),
+        tip::nodes::timer(io, 1000ms),
         []{
             return "hello";
         },
@@ -23,5 +23,6 @@ int main()
     auto g = tip::make_graph(std::move(nodes), edges);
 
     tip::start_roots(g);
-    loop->run();
+
+    io.run();
 }

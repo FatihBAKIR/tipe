@@ -6,6 +6,7 @@
 #include <cwpack.hpp>
 #include <tipe/nodes/msgpack_to_json.hpp>
 #include <tipe/tipe.hpp>
+#include <uvw.hpp>
 
 template <class T>
 void one_elem_test(T t)

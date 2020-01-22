@@ -4,33 +4,48 @@
 
 #pragma once
 
-#include <uvw.hpp>
 #include <chrono>
 #include <tipe/flow_ctx.hpp>
+#include <boost/asio.hpp>
 
 namespace tip::nodes
 {
     class timer
     {
     public:
-        timer(const std::shared_ptr<uvw::Loop>& loop, std::chrono::milliseconds interval)
-            : m_tmr(loop->resource<uvw::TimerHandle>()),
-              m_interval(interval)
-        {
+        timer(boost::asio::io_service& io, std::chrono::milliseconds interval)
+            : m_tmr(std::make_shared<boost::asio::high_resolution_timer>(io)), m_interval(interval) {
         }
 
         template <class GraphT, class NextT>
         void tip_start(GraphT& g, NextT&& start)
         {
-            static int x = 0;
-            m_tmr->on<uvw::TimerEvent>([start](const uvw::TimerEvent& e, uvw::TimerHandle&) {
-                start(empty_ctx{});
-            });
-            m_tmr->start(m_interval, m_interval);
+            auto handler = [this, start = std::forward<NextT>(start)](const boost::system::error_code& ec) {
+                this->handle(ec, std::move(start));
+            };
+            m_tmr->expires_from_now(m_interval);
+            m_tmr->async_wait(handler);
         }
 
     private:
+        template <class NextT>
+        void handle(const boost::system::error_code& ec, NextT&& start)
+        {
+            if (ec)
+            {
+                std::cerr << ec.message() << '\n';
+                return;
+            }
+
+            auto handler = [this, start = std::forward<NextT>(start)](const boost::system::error_code& ec) {
+                this->handle(ec, std::move(start));
+            };
+            m_tmr->expires_from_now(m_interval);
+            m_tmr->async_wait(handler);
+            start(empty_ctx{});
+        };
+
+        std::shared_ptr<boost::asio::high_resolution_timer> m_tmr;
         std::chrono::milliseconds m_interval;
-        std::shared_ptr<uvw::TimerHandle> m_tmr;
     };
 }

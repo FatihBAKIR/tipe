@@ -24,15 +24,17 @@ add_library(tipe
     include/tipe/nodes/msgpack_to_json.hpp
     include/tipe/nodes/tcp.hpp
     include/tipe/nodes/timer.hpp
-    include/tipe/nodes/aggregate.hpp include/tipe/flow_ctx.hpp)
+    include/tipe/nodes/aggregate.hpp
+    include/tipe/flow_ctx.hpp)
 
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost REQUIRED system)
 find_package(Threads REQUIRED)
 target_include_directories(tipe PUBLIC include)
-target_link_libraries(tipe PUBLIC ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(tipe PUBLIC ${CMAKE_THREAD_LIBS_INIT} Boost::boost Boost::system)
 
 add_subdirectory(external/CWPack)
 target_link_libraries(tipe PUBLIC cwpack)
-
 
 set(PROJECT_CMAKE_IN ${CMAKE_SOURCE_DIR}/cmake/in)
 set(PROJECT_DEPS_DIR ${CMAKE_SOURCE_DIR}/deps)
@@ -50,5 +52,5 @@ target_include_directories(tipe PUBLIC ${LIBUV_DEPS_DIR}/include)
 add_subdirectory(tests)
 add_subdirectory(samples)
 
-add_subdirectory(external/postgres)
-target_link_libraries(tipe PUBLIC taocpp::postgres)
+#add_subdirectory(external/postgres)
+#target_link_libraries(tipe PUBLIC taocpp::postgres)
